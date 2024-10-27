@@ -10,6 +10,10 @@ body{
     background: var(--bs-light);
 }
 
+/* Hide Scrollbar */
+*::-webkit-scrollbar{display:none}*{scrollbar-width:none}body{overflow:hidden}
+
+
 /* Main Container */
 .container{
     max-width: 400px;
@@ -69,6 +73,31 @@ input[type="checkbox"]:checked {
   background: var(--bs-light);
   box-sizing: border-box;
   border-radius: 15px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  /* padding-bottom: 100px; */
 }
 
+/* Message Template */
+.messageTemplate{
+  margin: 10px 0;
+}
+.messageTemplate .time{
+  font-size: 12px;
+}
+.messageTemplate .message{
+  display: inline-block;
+  width: auto;
+  max-width: 50%;
+  padding: 3px 0;
+}
 
+/* Message Input Box */
+.chatContainer #messageInput{
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  height: 40px;
+  width: calc(100% - 40px);
+  padding: 0 20px;
+}

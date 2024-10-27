@@ -54,9 +54,20 @@
         </div>
 
         <!--[ Main Section ]-->
-        <main class="chatContainer">
-          <div class="chatBox border"></div>
+        <main class="chatContainer" style="overflow: hidden;">
+          <!-- [Chat Box (Output)] -->
+          <div id="chatBox" class="chatBox border p-4 pb-5">
+              <!-- Messages Will load Here -->
+          </div>
 
+          <!-- [ Message Box (input)] -->
+          <div id="sendMessage" class="sendMessage">
+            <input type="text" name="profilePicture" id="profilePicture" value="https://i.ibb.co/nB8wFF9/userImg.png" hidden>
+            <input type="text" name="Name" id="Name" value="RAHUL" hidden>
+            <input name="Message" id="messageInput" type="text" class="border rounded-pill">
+            <input type="submit" value="Send">
+          </div>
+          
         </main>
     </div>
 </body>
