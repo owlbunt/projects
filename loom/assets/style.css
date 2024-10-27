@@ -7,6 +7,7 @@
 body{
     height: 100dvh!important;
     width: 100dvw;
+    background: var(--bs-light);
 }
 
 /* Main Container */
@@ -25,13 +26,49 @@ input[type="checkbox"]:checked {
     border-color: black;
 }
 
+/* Header */
+.header{
+  height: 60px;
+  width: 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+  z-index:0;
+  background:var(--bs-light);
+}
+
+/* Sidebar Menu */
+#sidebar{
+  position: relative;
+}
+
 
 /* /////////  Chat Page ////////////*/
 /* Chat Container */
-.chatContainer{
+.globalChat{
   display: grid;
   grid-template-columns: 1fr 4fr;
   height: 100%;
   width: 100%;
 }
+
+/* Global Chat */
+.chatContainer{
+  position: relative;
+  height: calc(100% - 60px);
+  top:60px;
+  padding: 8px;
+  border-radius: 23px;
+  background: var(--bs-white);
+}
+
+/* Chat Box */
+.chatBox{
+  height: 100%;
+  width: 100%;
+  background: var(--bs-light);
+  box-sizing: border-box;
+  border-radius: 15px;
+}
+
 
