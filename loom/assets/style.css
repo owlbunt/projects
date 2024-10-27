@@ -1,0 +1,37 @@
+/* Universal Values */
+:root{
+
+}
+
+/* Body */
+body{
+    height: 100dvh!important;
+    width: 100dvw;
+}
+
+/* Main Container */
+.container{
+    max-width: 400px;
+}
+
+/* Hide the default checkbox */
+input[type="checkbox"] {
+    appearance: none;
+  }
+
+/* Style the checkbox when checked */
+input[type="checkbox"]:checked {
+    background-color:black; /* Change to your desired color */
+    border-color: black;
+}
+
+
+/* /////////  Chat Page ////////////*/
+/* Chat Container */
+.chatContainer{
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  height: 100%;
+  width: 100%;
+}
+
