@@ -229,12 +229,24 @@ function sendMessage() {
 
 
 
-// Menu Button
-function openMobileMenu(){
-    document.querySelector(".mobileMenu").classList.toggle("active");
-    console.log("working")
+// Mobile Menu
+function openMobileMenu() {
+    const mobileMenu = document.querySelector(".mobileMenu");
+    mobileMenu.classList.toggle("active");
+    // Populate the mobile menu with sidebar content
     const sourceContent = document.querySelector('#sidebar').outerHTML;
-    document.querySelector('.mobileMenu').innerHTML = sourceContent;
+    mobileMenu.innerHTML = sourceContent;
+
+    // Add event listener to detect clicks outside the menu
+    if (mobileMenu.classList.contains("active")) {
+        document.addEventListener('mousedown', (event) => {
+            if (!mobileMenu.contains(event.target)) {
+                mobileMenu.classList.remove("active");
+                document.removeEventListener('mousedown', arguments.callee);
+            }
+        });
+    }
 }
+
 
 
