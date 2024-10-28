@@ -90,14 +90,44 @@ input[type="checkbox"]:checked {
   width: auto;
   max-width: 50%;
   padding: 3px 0;
+  margin-left: 40px;
 }
 
 /* Message Input Box */
-.chatContainer #messageInput{
+.chatContainer #message{
   position: absolute;
   bottom: 20px;
   left: 20px;
   height: 40px;
   width: calc(100% - 40px);
   padding: 0 20px;
+}
+.chatContainer #sendMessageBtn{
+  display: inline-block;
+  position: absolute;
+  right: 25px;
+  bottom: 20px;
+  border-radius: 25px;
+  height: 40px;
+  width: 40px;
+  line-height: 15px;
+}
+#sendMessageBtn:hover{
+  background: var(--bs-gray-400);
+}
+
+
+
+/* Responsive */
+@media screen and (max-width: 480px){
+  /* Hide Sidebar */
+  .sidebar{
+    display: none!important;
+  }
+  .chatContainer{
+    width: 100vw;
+  }
+  .messageTemplate .message{
+    max-width: 100%;
+  }
 }

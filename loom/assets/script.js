@@ -112,6 +112,12 @@ async function loggedIn(){
             const response = await fetch("./chat.html"); 
             const chatHtml = await response.text();
             document.body.innerHTML = chatHtml; 
+            // Send Message On Enter
+            document.querySelector("#message").addEventListener("keypress", (event)=>{
+                if (event.key === "Enter") {
+                    sendMessage();
+                  }
+            })
         } catch (error) {
             console.error("Error loading chat content:", error);
         }
@@ -150,10 +156,10 @@ async function displayMessages() {
             if (data.hasOwnProperty(key)) {
                 const messageData = data[key];
                 // Destructure properties from messageData
-                const { name, message, timestamp } = messageData; // Use lowercase 'name', 'message', and 'timestamp'
+                const { name, message, timestamp, profilePicture } = messageData; // Use lowercase 'name', 'message', and 'timestamp'
 
                 // Check if properties exist
-                if (name && message && timestamp) {
+                if (name && message && timestamp && profilePicture) {
                     // Format the timestamp to a more readable time format
                     const date = new Date(timestamp);
                     const options = { hour: '2-digit', minute: '2-digit', hour12: true };
@@ -164,11 +170,11 @@ async function displayMessages() {
                     messageDiv.innerHTML = `
                         <div class="messageTemplate">
                             <div class="userInfo d-flex align-items-center">
-                                <img src="assets/images/userImg.png" alt="Profile Picture" height="30px" class="border rounded-circle p-1 me-2">
+                                <img src="${profilePicture}" alt="Profile Picture" height="30px" class="border rounded-circle p-1 me-2">
                                 <span class="name fw-bold me-1">${name}</span>
-                                <span class="time text-muted">${formattedTime}</span>
+                                <span class="time text-muted">• ${formattedTime}</span>
                             </div>
-                            <p class="message ms-5 border rounded-pill bg-white ps-3 pe-3">${message}</p>
+                            <p class="message border rounded-4 p-1 bg-white ps-3 pe-3">${message}</p>
                         </div>
                     `;
                     
@@ -192,50 +198,41 @@ setInterval(displayMessages, 1000);
 
 
 
+// Send Message To Databse
+function sendMessage() {
+    const message = document.querySelector("#messageInput #message").value;
+    const name = userFullName;
+    const profilePicture = profileImg;
 
-
-
-const sendMessageForm = document.getElementById("sendMessage");
-const messageInput = document.getElementById("messageInput");
-const profilePictureInput = document.getElementById("profilePicture");
-const nameInput = document.getElementById("Name");
-
-sendMessageForm.addEventListener("submit", function (e) {
-    e.preventDefault(); // Prevent the default form submission
-
-    const message = messageInput.value.trim(); // Get the message input
-    const name = nameInput.value; // Get the name input
-    const profilePicture = profilePictureInput.value; // Get the profile picture URL
-
+    // Check if the message box is not empty
     if (message) {
         const messageData = {
-            profilePicture,
-            name,
-            message,
-            timestamp: new Date().toISOString() // Add a timestamp
+            name: name,
+            profilePicture: profilePicture,
+            message: message,
+            timestamp: new Date().toISOString()
         };
-
+        // Message Location In Database
+        let URL = `${databaseURL}messages/global.json`
         // Post message to Firebase
-        fetch(databaseURL, {
+        fetch(URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(messageData),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            messageInput.value = ""; // Clear input field
-        })
-        .catch(error => {
-            console.error('Error submitting message:', error);
         });
-    } else {
-        alert("Please type a message.");
+        // Clear Input After Sending
+        document.querySelector("#messageInput #message").value = "";
     }
-});
+};
+
+
+
+// Menu Button
+function openMobileMenu(){
+    document.querySelector("#sidebar").display = "block!important";
+    console.log("working")
+}
+
+

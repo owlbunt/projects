@@ -1,10 +1,15 @@
 <body>
     <!-- [ Header ] -->
-    <header class="header"></header>
+    <header class="header d-flex justify-content-between">
+      <div class="headerLeft">Loom</div>
+      <div class="headerRight">
+        <div onclick="openMobileMenu()" id="menuBtn" class="menuBtn btn btn-primary">Menu</div>
+      </div>
+    </header>
     <!-- [ Main Container ] -->
     <div class="globalChat h-100 p-0">
         <!-- [ Sidebar ] -->
-        <div id="sidebar" class="d-flex sidebar flex-column flex-shrink-0 p-3 bg-body-tertiary h-100 border-end" style="min-width: 300px;">
+        <div id="sidebar" class="sidebar d-flex sidebar flex-column flex-shrink-0 p-3 bg-body-tertiary h-100 border-end" style="min-width: 300px;">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
               <img src="assets/images/loomLogo.svg" alt="Logo" height="20px" class="me-2">
               <span class="fs-4 fw-bold">Loom</span>
@@ -60,14 +65,17 @@
               <!-- Messages Will load Here -->
           </div>
 
-          <!-- [ Message Box (input)] -->
-          <div id="sendMessage" class="sendMessage">
-            <input type="text" name="profilePicture" id="profilePicture" value="https://i.ibb.co/nB8wFF9/userImg.png" hidden>
-            <input type="text" name="Name" id="Name" value="RAHUL" hidden>
-            <input name="Message" id="messageInput" type="text" class="border rounded-pill">
-            <input type="submit" value="Send">
+          <!-- [ Message Box (input) ] -->
+          <div id="messageInput" class="sendMessage">
+            <input name="Message" id="message" type="text" class="border rounded-pill">
+            <button onclick="sendMessage()" id="sendMessageBtn" class="sendMessageBtn btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send" viewBox="0 0 25 18"><g transform="rotate(45, 8, 8)"> <!-- Rotate by 45 degrees around the center (8, 8) -->
+                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+              </g></svg>
+            </button>
           </div>
           
+
         </main>
     </div>
 </body>
