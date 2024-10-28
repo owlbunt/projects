@@ -117,12 +117,33 @@ input[type="checkbox"]:checked {
 }
 
 
+/* Mobile Menu */
+.mobileMenu{
+  display: none;
+  position: absolute;
+  z-index: 99;
+  max-width: 300px;
+  left: -300px;
+  height: 100%;
+  width: 100%;
+  transition: all 0.4s cubic-bezier(0.68, -0.0, 0.10, 1);
+}
+.mobileMenu.active{
+  position: absolute;
+  left: 0;
+}
+
+
 
 /* Responsive */
 @media screen and (max-width: 480px){
   /* Hide Sidebar */
-  .sidebar{
+  .globalChat .sidebar{
     display: none!important;
+  }
+  /* Mobile Menu */
+  .mobileMenu{
+    display: block;
   }
   .chatContainer{
     width: 100vw;

@@ -231,8 +231,10 @@ function sendMessage() {
 
 // Menu Button
 function openMobileMenu(){
-    document.querySelector("#sidebar").display = "block!important";
+    document.querySelector(".mobileMenu").classList.toggle("active");
     console.log("working")
+    const sourceContent = document.querySelector('#sidebar').outerHTML;
+    document.querySelector('.mobileMenu').innerHTML = sourceContent;
 }
 
 
