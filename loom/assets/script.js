@@ -7,6 +7,8 @@ let userFullName = "Guest";
 // Get The User Details From Local Storage (if logged-in)
 let storedUsername = localStorage.getItem('username');
 let storedPassword = localStorage.getItem('password');
+// Auto Scroll to bottom for new messages
+let autoScroll = true;
 
 // Fetch User Data From Database
 async function fetchUserData() {
@@ -61,6 +63,8 @@ async function checkLoggedInUser() {
             // Validate the login with fetched data
             validateLogin(username, password);
         });
+        // Clear If any value alredy exist in localstorage
+        localStorage.clear()
     }
 }
 checkLoggedInUser();
@@ -87,6 +91,10 @@ async function validateLogin(usernameInput, passwordInput) {
                 localStorage.removeItem('username'); localStorage.removeItem('password'); 
                 localStorage.setItem('username', usernameInput);localStorage.setItem('password', passwordInput);
             }
+            else{
+                localStorage.setItem('username', usernameInput);
+            }
+            
             // Load chat screen 
             await loggedIn();
             // Load Userdetails
@@ -133,22 +141,13 @@ function loadUserDetails(loggedInUser){
     document.querySelector("#userFullName").innerHTML = userFullName;
 }
 
-// Log Out User
-function logout(){
-    localStorage.clear();
-    location.reload();
-}
-
-
-
-
 // Load Messages From Database
 async function displayMessages() {
     const url = `${databaseURL}messages/global.json`;
     try {
         const response = await fetch(url);
         const data = await response.json();
-
+        
         const chatBox = document.getElementById('chatBox');
         chatBox.innerHTML = ''; // Clear any previous content
 
@@ -179,8 +178,18 @@ async function displayMessages() {
                     `;
                     
                     chatBox.appendChild(messageDiv); 
-                    // Scroll to the bottom of the chat box
-                    chatBox.scrollTop = chatBox.scrollHeight;
+
+                    // Check if the user is scrolling chats manually ( then dont auto scroll )
+                    chatBox.addEventListener("scroll", () => {
+                        // Check if user is near the bottom (within 20px of the bottom)
+                        if (chatBox.scrollTop + chatBox.clientHeight >= chatBox.scrollHeight - 20) {
+                            autoScroll = true; 
+                        } else {
+                            autoScroll = false;
+                        }
+                    });
+                    scrollToBottom()  
+                      
                 } else {
                     console.warn("Message data missing properties:", messageData);
                 }
@@ -192,10 +201,20 @@ async function displayMessages() {
 }
 
 // Refresh Messages Every Second
-setInterval(displayMessages, 1000);
+setInterval(() => {
+    if (localStorage.getItem("username")) {
+        displayMessages();
+    }
+}, 1000);
 
 
-
+// Scroll To Bottom (Chats)
+function scrollToBottom() {
+    const chatBox = document.getElementById("chatBox");
+    if (autoScroll) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+}
 
 
 // Send Message To Databse
@@ -228,7 +247,6 @@ function sendMessage() {
 };
 
 
-
 // Mobile Menu
 function openMobileMenu() {
     const mobileMenu = document.querySelector(".mobileMenu");
@@ -248,5 +266,8 @@ function openMobileMenu() {
     }
 }
 
-
-
+// Log Out User
+function logout(){
+    localStorage.clear();
+    location.reload();
+}

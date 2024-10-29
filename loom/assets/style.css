@@ -132,6 +132,9 @@ input[type="checkbox"]:checked {
   position: absolute;
   left: 0;
 }
+.menuBtn{
+  display: none;
+}
 
 
 
@@ -143,6 +146,9 @@ input[type="checkbox"]:checked {
   }
   /* Mobile Menu */
   .mobileMenu{
+    display: block;
+  }
+  .menuBtn{
     display: block;
   }
   .chatContainer{
