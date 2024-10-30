@@ -1,214 +1,179 @@
-//  Database URL (firebase)
-const databaseURL = "https://loomchatapp-default-rtdb.asia-southeast1.firebasedatabase.app/loomChatApp/";
-// Default Profile Image
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyBvuUQ94hFIcLJ3PnErAOKiWbxdu07lhwg",
+    authDomain: "loomchatapp.firebaseapp.com",
+    databaseURL: "https://loomchatapp-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "loomchatapp",
+    storageBucket: "loomchatapp.appspot.com",
+    messagingSenderId: "244738338912",
+    appId: "1:244738338912:web:2f0fc983e6f09f28529305",
+    measurementId: "G-NWK4HERHLJ"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+// Default Profile Image and Username
 let profileImg = "https://i.ibb.co/nB8wFF9/userImg.png";
-// Default User Name
 let userFullName = "Guest";
-// Get The User Details From Local Storage (if logged-in)
-let storedUsername = localStorage.getItem('username');
-let storedPassword = localStorage.getItem('password');
-// Auto Scroll to bottom for new messages
+// Local Storage User Data
+const userData = JSON.parse(localStorage.getItem('userData'));
 let autoScroll = true;
+
+// Admin Commands
+const commands = {
+    '/clear': clearMessages,
+    // Add more commands here in the future
+};
+
 
 // Fetch User Data From Database
 async function fetchUserData() {
-    const userDatabaseURL = `${databaseURL}userDatabase.json`; 
     try {
-        const response = await fetch(userDatabaseURL);
-        const data = await response.json();
-        return data;
+        const response = await fetch(`${firebaseConfig.databaseURL}/loomChatApp/userDatabase.json`);
+        return await response.json();
     } catch (error) {
         console.error("Error fetching user data:", error);
     }
 }
 
-
-// Function to check if the user is already logged in
+// Check if the user is already logged in
 async function checkLoggedInUser() {
-    // Check if username and passowrd found in localstorage
-    if (storedUsername && storedPassword) {
-        // fetch data from databse
-        let users = await fetchUserData();
-        // Check if the username match with any user in the database
-        let loggedInUser = users[storedUsername];
-        if(loggedInUser){
-            // load chat screen if password match
-            if(loggedInUser.Password == storedPassword){
-                await loggedIn();
-            }else{
-                logout();
-            }
+    if (userData) {
+        const storedUsername = userData.Username;
+        const storedPassword = userData.Password;
+        const users = await fetchUserData();
+        const loggedInUser = users[storedUsername];
+
+        if (loggedInUser && loggedInUser.Password === storedPassword && loggedInUser.Status === "Active") {
+            await loggedIn();
             loadUserDetails(loggedInUser);
+        } else {
+            logout();
         }
-    }else{
-        // Load Login Page (if not logged-in)
-        async function loadLoginScreen() {
-            try {
-                const response = await fetch("./login.html"); 
-                const loginHtml = await response.text();
-                document.body.innerHTML = loginHtml; 
-            } catch (error) {
-                console.error("Error loading chat content:", error);
-            }
-        }
+    } else {
         await loadLoginScreen();
-        
-        // Handling form submission
-        const loginForm = document.querySelector("form");
-        loginForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            // Get the entered username and password
-            const username = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            // Validate the login with fetched data
-            validateLogin(username, password);
-        });
-        // Clear If any value alredy exist in localstorage
-        localStorage.clear()
     }
 }
 checkLoggedInUser();
 
-
-// Function to validate the login
-async function validateLogin(usernameInput, passwordInput) {
-    let users = await fetchUserData(); // Fetch the user data 
-    // Check if the username exists in the database
-    if (users[usernameInput]) {
-        const userDetails = users[usernameInput];
-
-        // Check if the user's status is 'Active'
-        if (userDetails.Status !== "Active") {
-            console.log("User account is not active.");
-            return;
-        }
-
-        // Check if the password matches
-        if (userDetails.Password === passwordInput) {       
-            // Check if the user wants to save the login details
-            if(document.querySelector("#rememberMe").checked){
-                // Remove old Login Details and Store New Details
-                localStorage.removeItem('username'); localStorage.removeItem('password'); 
-                localStorage.setItem('username', usernameInput);localStorage.setItem('password', passwordInput);
-            }
-            else{
-                localStorage.setItem('username', usernameInput);
-            }
-            
-            // Load chat screen 
-            await loggedIn();
-            // Load Userdetails
-            loadUserDetails(userDetails)
-
-        } else {
-            console.log("Incorrect password.");
-            // If passowrd is Incorrect show an error in passowrd
-            document.querySelector("#password").style.border ="1px solid red";
-        }
-    } else {
-        console.log("Username not found.");
-        // If username is Incorrect or not found show an error in username
-        document.querySelector("#email").style.border ="1px solid red";
-    }
-}
-
-// Login User
-async function loggedIn(){
-    // Load Chat Page
-    async function loadChatScreen() {
-        try {
-            const response = await fetch("./chat.html"); 
-            const chatHtml = await response.text();
-            document.body.innerHTML = chatHtml; 
-            // Send Message On Enter
-            document.querySelector("#message").addEventListener("keypress", (event)=>{
-                if (event.key === "Enter") {
-                    sendMessage();
-                  }
-            })
-        } catch (error) {
-            console.error("Error loading chat content:", error);
-        }
-    }
-    await loadChatScreen();
-}
-
-function loadUserDetails(loggedInUser){
-    // Load User Profile Details 
-    profileImg = loggedInUser["Profile Picture"];
-    userFullName = loggedInUser["Name"];
-    document.querySelector("#profileImg").src = profileImg;
-    document.querySelector("#userFullName").innerHTML = userFullName;
-}
-
-// Load Messages From Database
-async function displayMessages() {
-    const url = `${databaseURL}messages/global.json`;
+// Load Login Screen
+async function loadLoginScreen() {
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        const chatBox = document.getElementById('chatBox');
-        chatBox.innerHTML = ''; // Clear any previous content
+        const response = await fetch("./login.html");
+        document.body.innerHTML = await response.text();
+        const loginForm = document.querySelector("form");
 
-        for (const key in data) {
-            if (data.hasOwnProperty(key)) {
-                const messageData = data[key];
-                // Destructure properties from messageData
-                const { name, message, timestamp, profilePicture } = messageData; // Use lowercase 'name', 'message', and 'timestamp'
-
-                // Check if properties exist
-                if (name && message && timestamp && profilePicture) {
-                    // Format the timestamp to a more readable time format
-                    const date = new Date(timestamp);
-                    const options = { hour: '2-digit', minute: '2-digit', hour12: true };
-                    const formattedTime = date.toLocaleTimeString([], options);
-
-                    // Create a new div for the message using your template
-                    const messageDiv = document.createElement('div');
-                    messageDiv.innerHTML = `
-                        <div class="messageTemplate">
-                            <div class="userInfo d-flex align-items-center">
-                                <img src="${profilePicture}" alt="Profile Picture" height="30px" class="border rounded-circle p-1 me-2">
-                                <span class="name fw-bold me-1">${name}</span>
-                                <span class="time text-muted">• ${formattedTime}</span>
-                            </div>
-                            <p class="message border rounded-4 p-1 bg-white ps-3 pe-3">${message}</p>
-                        </div>
-                    `;
-                    
-                    chatBox.appendChild(messageDiv); 
-
-                    // Check if the user is scrolling chats manually ( then dont auto scroll )
-                    chatBox.addEventListener("scroll", () => {
-                        // Check if user is near the bottom (within 20px of the bottom)
-                        if (chatBox.scrollTop + chatBox.clientHeight >= chatBox.scrollHeight - 20) {
-                            autoScroll = true; 
-                        } else {
-                            autoScroll = false;
-                        }
-                    });
-                    scrollToBottom()  
-                      
-                } else {
-                    console.warn("Message data missing properties:", messageData);
-                }
-            }
-        }
+        loginForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            validateLogin(
+                document.getElementById("email").value,
+                document.getElementById("password").value
+            );
+        });
+        localStorage.clear();
     } catch (error) {
-        console.error("Error fetching messages:", error);
+        console.error("Error loading login screen:", error);
     }
 }
 
-// Refresh Messages Every Second
-setInterval(() => {
-    if (localStorage.getItem("username")) {
-        displayMessages();
+// Validate the login
+async function validateLogin(usernameInput, passwordInput) {
+    const users = await fetchUserData();
+    const userDetails = users[usernameInput];
+    console.log(userDetails)
+
+    if (!userDetails) {
+        document.querySelector("#email").style.border = "1px solid red";
+        return console.log("Username not found.");
     }
-}, 1000);
+
+    if (userDetails.Status !== "Active") {
+        return console.log("User account is not active.");
+    }
+
+    if (userDetails.Password === passwordInput) {
+        // Save all user data to localStorage
+        if (document.querySelector("#rememberMe").checked) {
+            localStorage.setItem('userData', JSON.stringify(userDetails));
+        }
+
+        await loggedIn();
+        loadUserDetails(userDetails);
+    } else {
+        document.querySelector("#password").style.border = "1px solid red";
+        console.log("Incorrect password.");
+    }
+}
 
 
-// Scroll To Bottom (Chats)
+// Load Chat Screen
+async function loggedIn() {
+    try {
+        const response = await fetch("./chat.html");
+        document.body.innerHTML = await response.text();
+
+        document.querySelector("#message").addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        const chatBox = document.getElementById("chatBox");
+        chatBox.addEventListener("scroll", () => {
+            autoScroll = chatBox.scrollTop + chatBox.clientHeight >= chatBox.scrollHeight - 20;
+        });
+
+        loadMessages();
+    } catch (error) {
+        console.error("Error loading chat content:", error);
+    }
+}
+
+// Load User Profile Details
+function loadUserDetails(userDetails) {
+    profileImg = userDetails["Profile Picture"];
+    userFullName = userDetails["Name"];
+    document.querySelector("#profileImg").src = profileImg;
+    document.querySelector("#userFullName").textContent = userFullName;
+}
+
+// Real-time listener for messages
+function loadMessages() {
+    const messagesRef = firebase.database().ref("loomChatApp/messages/global");
+    messagesRef.on("value", (snapshot) => {
+        const data = snapshot.val();
+        displayMessages(data);
+    });
+}
+
+// Display messages in the chat
+function displayMessages(data) {
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML = "";
+
+    for (const key in data) {
+        const { name, message, timestamp, profilePicture } = data[key];
+        const date = new Date(timestamp);
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        const messageDiv = document.createElement("div");
+        messageDiv.innerHTML = `
+            <div class="messageTemplate">
+                <div class="userInfo d-flex align-items-center">
+                    <img src="${profilePicture}" alt="Profile Picture" height="30px" class="border rounded-circle p-1 me-2">
+                    <span class="name fw-bold me-1">${name}</span>
+                    <span class="time text-muted">• ${formattedTime}</span>
+                </div>
+                <p class="message border rounded-4 p-1 bg-white ps-3 pe-3">${message}</p>
+                <button class="btn btn-danger btn-sm mt-1" onclick="deleteMessage('${key}')">Delete</button>
+            </div>
+        `;
+
+        chatBox.appendChild(messageDiv);
+    }
+    scrollToBottom();
+}
+
+// Scroll chat to bottom if autoScroll is true
 function scrollToBottom() {
     const chatBox = document.getElementById("chatBox");
     if (autoScroll) {
@@ -216,58 +181,88 @@ function scrollToBottom() {
     }
 }
 
-
-// Send Message To Databse
+// Send Message to Database
 function sendMessage() {
-    const message = document.querySelector("#messageInput #message").value;
-    const name = userFullName;
-    const profilePicture = profileImg;
+    const messageInput = document.getElementById("message");
+    const message = messageInput.value.trim();
 
-    // Check if the message box is not empty
     if (message) {
-        const messageData = {
-            name: name,
-            profilePicture: profilePicture,
-            message: message,
-            timestamp: new Date().toISOString()
-        };
-        // Message Location In Database
-        let URL = `${databaseURL}messages/global.json`
-        // Post message to Firebase
-        fetch(URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(messageData),
-        });
-        // Clear Input After Sending
-        document.querySelector("#messageInput #message").value = "";
+        // Check if the message is a command
+        const command = message.split(" ")[0]; // Get the first word
+        if (commands[command]) {
+            // Check If the user has Admin Rights
+            if(userData.Role == "Admin"){
+                commands[command](); 
+            }else{
+                console.log("You'r Not Admin")
+            }
+             
+        } else {
+            const messageData = {
+                name: userFullName,
+                profilePicture: profileImg,
+                message,
+                timestamp: new Date().toISOString()
+            };
+
+            fetch(`${firebaseConfig.databaseURL}/loomChatApp/messages/global.json`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(messageData),
+            });
+        }
+
+        messageInput.value = "";
     }
-};
+}
 
 
-// Mobile Menu
+// Mobile Menu Toggle
 function openMobileMenu() {
     const mobileMenu = document.querySelector(".mobileMenu");
     mobileMenu.classList.toggle("active");
-    // Populate the mobile menu with sidebar content
-    const sourceContent = document.querySelector('#sidebar').outerHTML;
-    mobileMenu.innerHTML = sourceContent;
+    mobileMenu.innerHTML = document.querySelector("#sidebar").outerHTML;
 
-    // Add event listener to detect clicks outside the menu
     if (mobileMenu.classList.contains("active")) {
-        document.addEventListener('mousedown', (event) => {
+        document.addEventListener("mousedown", function hideMenu(event) {
             if (!mobileMenu.contains(event.target)) {
                 mobileMenu.classList.remove("active");
-                document.removeEventListener('mousedown', arguments.callee);
+                document.removeEventListener("mousedown", hideMenu);
             }
         });
     }
 }
 
-// Log Out User
-function logout(){
+// Logout Function
+function logout() {
     localStorage.clear();
     location.reload();
+}
+
+// Delete Message
+function deleteMessage(key) {
+    fetch(`${firebaseConfig.databaseURL}/loomChatApp/messages/global/${key}.json`, {
+        method: 'DELETE',
+    })
+}
+
+// Function to clear all messages
+function clearMessages() {
+    // Fetch all messages to delete them
+    fetch(`${firebaseConfig.databaseURL}/loomChatApp/messages/global.json`)
+        .then(response => response.json())
+        .then(data => {
+            const keys = Object.keys(data);
+            const deletePromises = keys.map(key => deleteMessage(key)); // Use deleteMessage function
+
+            // Wait for all delete requests to finish
+            return Promise.all(deletePromises);
+        })
+        .then(() => {
+            console.log("All messages cleared.");
+            loadMessages(); // Optionally reload messages after clearing
+        })
+        .catch(error => {
+            console.error("Error clearing messages:", error);
+        });
 }
