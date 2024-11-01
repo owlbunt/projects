@@ -15,7 +15,7 @@ firebase.initializeApp(firebaseConfig);
 let profileImg = "https://i.ibb.co/nB8wFF9/userImg.png";
 let userFullName = "Guest";
 // Local Storage User Data
-const userData = JSON.parse(localStorage.getItem('userData'));
+let userData = JSON.parse(localStorage.getItem('userData')); ;
 let autoScroll = true;
 
 // Admin Commands
@@ -94,6 +94,7 @@ async function validateLogin(usernameInput, passwordInput) {
         // Save all user data to localStorage
         if (document.querySelector("#rememberMe").checked) {
             localStorage.setItem('userData', JSON.stringify(userDetails));
+            userData = JSON.parse(localStorage.getItem('userData'));
         }
 
         await loggedIn();
@@ -104,8 +105,15 @@ async function validateLogin(usernameInput, passwordInput) {
     }
 }
 
+// Load User Profile Details (If Logged-in)
+function loadUserDetails(userDetails) {
+    profileImg = userDetails["Profile Picture"];
+    userFullName = userDetails["Name"];
+    document.querySelector("#profileImg").src = profileImg;
+    document.querySelector("#userFullName").textContent = userFullName;
+}
 
-// Load Chat Screen
+// Load Chat Page
 async function loggedIn() {
     try {
         const response = await fetch("./chat.html");
@@ -128,24 +136,7 @@ async function loggedIn() {
     }
 }
 
-// Load User Profile Details
-function loadUserDetails(userDetails) {
-    profileImg = userDetails["Profile Picture"];
-    userFullName = userDetails["Name"];
-    document.querySelector("#profileImg").src = profileImg;
-    document.querySelector("#userFullName").textContent = userFullName;
-}
-
-// Real-time listener for messages
-function loadMessages() {
-    const messagesRef = firebase.database().ref("loomChatApp/messages/global");
-    messagesRef.on("value", (snapshot) => {
-        const data = snapshot.val();
-        displayMessages(data);
-    });
-}
-
-// Display messages in the chat
+// Load Chats
 function displayMessages(data) {
     const chatBox = document.getElementById("chatBox");
     chatBox.innerHTML = "";
@@ -163,8 +154,20 @@ function displayMessages(data) {
                     <span class="name fw-bold me-1">${name}</span>
                     <span class="time text-muted">• ${formattedTime}</span>
                 </div>
-                <p class="message border rounded-4 p-1 bg-white ps-3 pe-3">${message}</p>
-                <button class="btn btn-danger btn-sm mt-1" onclick="deleteMessage('${key}')">Delete</button>
+                <div class="d-flex align-items-center">
+                    <p class="message border rounded-4 bg-white ps-3 pe-3">${message}</p>
+                    <div class="dropdown">
+                        <svg class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/></svg>
+                        </a>
+                        <ul class="dropdown-menu text-small shadow">
+                            <li><a class="dropdown-item disabled" href="#">Replay</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item disabled" href="#">Copy</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a onclick="deleteMessage('${key}')" class="dropdown-item">Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         `;
 
@@ -173,7 +176,16 @@ function displayMessages(data) {
     scrollToBottom();
 }
 
-// Scroll chat to bottom if autoScroll is true
+// Fetch Messages In Realtime
+function loadMessages() {
+    const messagesRef = firebase.database().ref("loomChatApp/messages/global");
+    messagesRef.on("value", (snapshot) => {
+        const data = snapshot.val();
+        displayMessages(data);
+    });
+}
+
+// Scroll chats to bottom if there is a new message
 function scrollToBottom() {
     const chatBox = document.getElementById("chatBox");
     if (autoScroll) {
@@ -216,7 +228,6 @@ function sendMessage() {
     }
 }
 
-
 // Mobile Menu Toggle
 function openMobileMenu() {
     const mobileMenu = document.querySelector(".mobileMenu");
@@ -233,20 +244,14 @@ function openMobileMenu() {
     }
 }
 
-// Logout Function
-function logout() {
-    localStorage.clear();
-    location.reload();
-}
-
-// Delete Message
+// Delete Messages
 function deleteMessage(key) {
     fetch(`${firebaseConfig.databaseURL}/loomChatApp/messages/global/${key}.json`, {
         method: 'DELETE',
     })
 }
 
-// Function to clear all messages
+// Function to clear all messages (Admin)
 function clearMessages() {
     // Fetch all messages to delete them
     fetch(`${firebaseConfig.databaseURL}/loomChatApp/messages/global.json`)
@@ -265,4 +270,10 @@ function clearMessages() {
         .catch(error => {
             console.error("Error clearing messages:", error);
         });
+}
+
+// Logout Function
+function logout() {
+    localStorage.clear();
+    location.reload();
 }
