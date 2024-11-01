@@ -156,8 +156,8 @@ function displayMessages(data) {
                 </div>
                 <div class="d-flex align-items-center">
                     <p class="message border rounded-4 bg-white ps-3 pe-3">${message}</p>
-                    <div class="dropdown">
-                        <svg class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/></svg>
+                    <div class="dropdown d-flex">
+                        <svg style="opacity:.9" class="dropdown-toggle text-muted" data-bs-toggle="dropdown" aria-expanded="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/></svg>
                         </a>
                         <ul class="dropdown-menu text-small shadow">
                             <li><a class="dropdown-item disabled" href="#">Replay</a></li>
