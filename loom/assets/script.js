@@ -79,15 +79,13 @@ async function loadLoginScreen() {
 async function validateLogin(usernameInput, passwordInput) {
     const users = await fetchUserData();
     const userDetails = users[usernameInput];
-    console.log(userDetails)
-
     if (!userDetails) {
         document.querySelector("#email").style.border = "1px solid red";
         return console.log("Username not found.");
     }
 
     if (userDetails.Status !== "Active") {
-        return console.log("User account is not active.");
+        return console.log("Your account is not active.");
     }
 
     if (userDetails.Password === passwordInput) {
@@ -106,13 +104,10 @@ async function validateLogin(usernameInput, passwordInput) {
 }
 
 // Check User Login Status (Realtime)
-function userLoginStatus(){
-    const userDatabaseRef = firebase.database().ref("loomChatApp/userDatabase");
-    userDatabaseRef.on("value", (snapshot) => {
-        checkLoggedInUser();
-    });
-}
-userLoginStatus();
+const userDatabaseRef = firebase.database().ref("loomChatApp/userDatabase");
+userDatabaseRef.on("value", (snapshot) => {
+    checkLoggedInUser();
+});
 
 // Load User Profile Details (If Logged-in)
 function loadUserDetails(userDetails) {
@@ -219,6 +214,7 @@ function sendMessage() {
              
         } else {
             const messageData = {
+                sender : userData.Username,
                 name: userFullName,
                 profilePicture: profileImg,
                 message,
@@ -252,12 +248,24 @@ function openMobileMenu() {
     }
 }
 
-// Delete Messages
+// Delete Messages (Users)
 function deleteMessage(key) {
-    fetch(`${firebaseConfig.databaseURL}/loomChatApp/messages/global/${key}.json`, {
-        method: 'DELETE',
-    })
+    // Fetch the message data to check the Username
+    fetch(`${firebaseConfig.databaseURL}/loomChatApp/messages/global/${key}.json`)
+        .then(response => response.json())
+        .then(data => {
+            // Check if the Username in the message matches userData.Username
+            if (data && data.sender == userData.Username || userData.Role === "Admin") {
+                // If Username matches, delete the message
+                return fetch(`${firebaseConfig.databaseURL}/loomChatApp/messages/global/${key}.json`, {
+                    method: 'DELETE',
+                });
+            } else {
+                console.log("You can't Delete This Message!");
+            }
+        })
 }
+
 
 // Function to clear all messages (Admin)
 function clearMessages() {

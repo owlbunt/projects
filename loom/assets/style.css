@@ -50,6 +50,8 @@ input[type="checkbox"] {
 input[type="checkbox"]:checked {
     background-color:black; /* Change to your desired color */
     border-color: black;
+    border-radius: 100%;
+    padding: 2px;
 }
 
 /* Header */
@@ -159,6 +161,8 @@ input[type="checkbox"]:checked {
 .mobileMenu.active{
   position: absolute;
   left: 0;
+  box-shadow: 100px 0 0px 0px rgba(255, 255, 255, 0.8);
+  background: red;
 }
 .menuBtn{
   display: none;
