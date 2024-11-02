@@ -105,6 +105,15 @@ async function validateLogin(usernameInput, passwordInput) {
     }
 }
 
+// Check User Login Status (Realtime)
+function userLoginStatus(){
+    const userDatabaseRef = firebase.database().ref("loomChatApp/userDatabase");
+    userDatabaseRef.on("value", (snapshot) => {
+        checkLoggedInUser();
+    });
+}
+userLoginStatus();
+
 // Load User Profile Details (If Logged-in)
 function loadUserDetails(userDetails) {
     profileImg = userDetails["Profile Picture"];
@@ -129,7 +138,6 @@ async function loggedIn() {
         chatBox.addEventListener("scroll", () => {
             autoScroll = chatBox.scrollTop + chatBox.clientHeight >= chatBox.scrollHeight - 20;
         });
-
         loadMessages();
     } catch (error) {
         console.error("Error loading chat content:", error);
