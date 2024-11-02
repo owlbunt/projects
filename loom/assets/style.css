@@ -3,34 +3,12 @@
 
 }
 
-/* Fonts */
-@font-face {
-  font-family: 'Poppins Light';
-  src: url('../assets/fonts/Poppins-Light.ttf') format('truetype');
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins Regular';
-  src: url('../assets/fonts/Poppins-Regular.ttf') format('truetype');
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins Medium';
-  src: url('../assets/fonts/Poppins-Medium.ttf') format('truetype');
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Poppins Bold';
-  src: url('../assets/fonts/Poppins-Bold.ttf') format('truetype');
-  font-style: normal;
-}
-
 /* Body */
 body{
     height: 100dvh!important;
     width: 100dvw;
     background: var(--bs-light);
-    font-family:'Poppins Regular';
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Hide Scrollbar */
@@ -109,9 +87,6 @@ input[type="checkbox"]:checked {
 .messageTemplate .time{
   font-size: 12px;
 }
-.messageTemplate .name{
-  font-family: 'Poppins Regular';
-}
 .messageTemplate .message{
   display: inline-block;
   width: auto;
@@ -120,7 +95,6 @@ input[type="checkbox"]:checked {
   margin-left: 40px;
   word-break: break-word;
   margin-bottom: 0;
-  font-family: 'Poppins Light';
 }
 
 /* Message Input Box */
