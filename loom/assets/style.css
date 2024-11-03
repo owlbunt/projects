@@ -96,6 +96,20 @@ input[type="checkbox"]:checked {
   word-break: break-word;
   margin-bottom: 0;
 }
+.messageTemplate .actionMenuBtn{
+  height: 30px;
+  width: 30px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+  margin-left: 2px;
+}
+.actionMenuBtn:active{
+  border: 1.5px solid var(--bs-gray-500);
+}
 
 /* Message Input Box */
 .chatContainer #message{
@@ -116,10 +130,9 @@ input[type="checkbox"]:checked {
   width: 40px;
   line-height: 15px;
 }
-#sendMessageBtn:hover{
+#sendMessageBtn:active{
   background: var(--bs-gray-400);
 }
-
 
 /* Mobile Menu */
 .mobileMenu{
@@ -135,7 +148,7 @@ input[type="checkbox"]:checked {
 .mobileMenu.active{
   position: absolute;
   left: 0;
-  box-shadow: 100px 0 0px 0px rgba(255, 255, 255, 0.8);
+  box-shadow: 200px 0 0px 0px rgba(255, 255, 255, 0.8);
   background: red;
 }
 .menuBtn{
@@ -156,6 +169,9 @@ input[type="checkbox"]:checked {
   }
   .menuBtn{
     display: block;
+  }
+  .menuBtn:active{
+    border: 1.5px solid var(--bs-gray-500);
   }
   .chatContainer{
     width: 100vw;

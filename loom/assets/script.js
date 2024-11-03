@@ -115,6 +115,7 @@ function loadUserDetails(userDetails) {
     userFullName = userDetails["Name"];
     document.querySelector("#profileImg").src = profileImg;
     document.querySelector("#userFullName").textContent = userFullName;
+    document.querySelector("#userName").innerHTML = userData.Username;
 }
 
 // Load Chat Page
@@ -159,9 +160,10 @@ function displayMessages(data) {
                 </div>
                 <div class="d-flex align-items-center">
                     <p class="message border rounded-4 bg-white ps-3 pe-3">${message}</p>
-                    <div class="dropdown d-flex ms-2">
-                        <svg style="opacity:.9" class="dropdown-toggle text-muted" data-bs-toggle="dropdown" aria-expanded="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/></svg>
-                        </a>
+                    <div class="dropdown">
+                        <div class="actionMenuBtn" data-bs-toggle="dropdown">
+                            <svg style="opacity:.9" class="text-muted" aria-expanded="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16"><path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/></svg>
+                        </div>
                         <ul class="dropdown-menu text-small shadow">
                             <li><a class="dropdown-item disabled d-flex align-items-center justify-content-between" href="#">Replay <svg width="16px" height="16px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" transform="scale(-1, 1)";><g id="SVGRepo_bgCarrier" stroke-width="1"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14.6644 5.47875L18.6367 9.00968C20.2053 10.404 20.9896 11.1012 20.9896 11.9993C20.9896 12.8975 20.2053 13.5946 18.6367 14.989L14.6644 18.5199C13.9484 19.1563 13.5903 19.4746 13.2952 19.342C13 19.2095 13 18.7305 13 17.7725V15.4279C9.4 15.4279 5.5 17.1422 4 19.9993C4 10.8565 9.33333 8.57075 13 8.57075V6.22616C13 5.26817 13 4.78917 13.2952 4.65662C13.5903 4.52407 13.9484 4.8423 14.6644 5.47875Z" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></a></li>
                             <li><hr class="dropdown-divider m-1"></li>

@@ -58,20 +58,20 @@
                 </a>
               </li>
             </ul>
-            <!-- More Menu -->
-            <div class="dropdown">
-              <hr>
-              <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img id="profileImg" src="assets/images/userImg.png" alt="User Profile" width="32" height="32" class="rounded-circle me-2">
-                <span id="userFullName" class="fw-bold me-2">Guest</span>
-              </a>
-              <ul class="dropdown-menu text-small shadow">
-                <li><a class="dropdown-item disabled" href="#">Settings</a></li>
-                <li><a class="dropdown-item disabled" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a onclick="logout()" id="logout" class="dropdown-item">Sign out</a></li>
-              </ul>
+
+            <!-- Profile Widget -->
+            <div class="profileWidget border p-3 rounded-3">
+              <div class="userInfo d-flex align-items-center mb-4">
+                <img id="profileImg" src="assets/images/userImg.png" alt="User Profile" width="45" height="45" class="rounded-circle me-2">
+                <div>
+                  <span id="userFullName" class="fw-bold me-2 d-block">Name</span>
+                  <span id="userName" class="d-block text-muted">1234567890@loom</span>
+                </div>
+              </div>
+              <!-- Logout Button -->
+              <a onclick="logout()" id="logout" class="btn btn-danger w-100 rounded-5">Sign out</a>
             </div>
+
         </div>
 
         <!--[ Main Section ]-->
