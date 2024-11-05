@@ -239,7 +239,7 @@ function openMobileMenu() {
     const mobileMenu = document.querySelector(".mobileMenu");
     mobileMenu.classList.toggle("active");
     mobileMenu.innerHTML = document.querySelector("#sidebar").outerHTML;
-
+    
     if (mobileMenu.classList.contains("active")) {
         document.addEventListener("mousedown", function hideMenu(event) {
             if (!mobileMenu.contains(event.target)) {

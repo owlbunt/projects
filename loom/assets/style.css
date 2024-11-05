@@ -40,7 +40,7 @@ input[type="checkbox"]:checked {
   position: absolute;
   top: 0;
   z-index:0;
-  background:var(--bs-light);
+  background:var(--bs-white);
 }
 
 /* Sidebar Menu */
@@ -63,8 +63,8 @@ input[type="checkbox"]:checked {
   position: relative;
   height: calc(100% - 60px);
   top:60px;
-  padding: 8px;
-  border-radius: 23px;
+  /* padding: 8px; */
+  /* border-radius: 23px; */
   background: var(--bs-white);
 }
 
@@ -72,9 +72,9 @@ input[type="checkbox"]:checked {
 .chatBox{
   height: 100%;
   width: 100%;
-  background: var(--bs-light);
+  background: inherit;
   box-sizing: border-box;
-  border-radius: 15px;
+  /* border-radius: 15px; */
   overflow-x: hidden;
   overflow-y: scroll;
   /* padding-bottom: 100px; */

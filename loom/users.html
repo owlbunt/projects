@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+</head>
+<body>
+    <div id="userContainer"></div>
+
+
+
+    <script>
+        // Firebase Realtime Database URL
+const databaseURL = "https://loomchatapp-default-rtdb.asia-southeast1.firebasedatabase.app/loomChatApp/userDatabase.json";
+
+// Container where user elements will be added
+const userContainer = document.getElementById("userContainer"); // Make sure you have a div with this ID in HTML
+
+// Fetch user data from Firebase
+fetch(databaseURL)
+  .then(response => response.json())
+  .then(data => {
+    // Loop through each user in the database
+    for (const userId in data) {
+      if (data.hasOwnProperty(userId)) {
+        const user = data[userId];
+        // Create a user card for each user
+        const userCard = document.createElement("div");
+        userCard.classList.add("user-card"); // Add CSS class for styling if needed
+
+        // Profile Picture
+        const img = document.createElement("img");
+        img.src = user["Profile Picture"];
+        img.alt = `${user.Name}'s Profile Picture`;
+        img.classList.add("profile-pic"); // Add CSS class for styling
+        img.style.width = "50px";  // Adjust size as needed
+        img.style.borderRadius = "50%";  // Make image circular
+
+        // User Name
+        const nameElement = document.createElement("h3");
+        nameElement.innerText = user.Name;
+
+        // Username
+        const usernameElement = document.createElement("p");
+        usernameElement.innerText = user.Username;
+
+        // Append all elements to the user card
+        userCard.appendChild(img);
+        userCard.appendChild(nameElement);
+        userCard.appendChild(usernameElement);
+
+        // Append user card to the main container
+        userContainer.appendChild(userCard);
+      }
+    }
+  })
+  .catch(error => console.error("Error fetching user data:", error));
+
+    </script>
+    
+</body>
+</html>
