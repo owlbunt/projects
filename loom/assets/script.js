@@ -248,6 +248,24 @@ function openMobileMenu() {
             }
         });
     }
+    // Menu Close Button
+    document.querySelector("#menuCloseBtn").addEventListener("click", ()=>{
+        mobileMenu.classList.remove("active");
+    })
+
+    // Close Mobile Menu On Slide
+    let touchStartX = 0;
+    let touchEndX = 0;
+    mobileMenu.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    });
+    mobileMenu.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+
+    if (touchStartX - touchEndX > 100) { 
+        mobileMenu.classList.remove("active");
+    }
+    });
 }
 
 // Delete Messages (Users)
