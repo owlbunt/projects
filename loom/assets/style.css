@@ -26,10 +26,16 @@ input[type="checkbox"] {
 
 /* Style the checkbox when checked */
 input[type="checkbox"]:checked {
-    background-color:black; /* Change to your desired color */
+    background-color:black;
     border-color: black;
     border-radius: 100%;
     padding: 2px;
+}
+
+/* Drop Down Menu */
+.dropdown-menu.show {
+  animation: menuAnimation 0.3s ease forwards;
+  transform-origin: top;
 }
 
 /* Header */
@@ -160,6 +166,11 @@ input[type="checkbox"]:checked {
 .profileWidgetIcon.active{
   opacity: .5;
 }
+.profileWidgetMenu{
+  position: absolute;
+  /* width: calc(100vw - 32px);
+  height:calc(100dvh - 16px); */
+}
 
 /* Responsive */
 @media screen and (max-width: 480px){
@@ -179,5 +190,23 @@ input[type="checkbox"]:checked {
   }
   .messageTemplate .message{
     max-width: 100%;
+  }
+}
+
+
+
+/* Animation */
+@keyframes menuAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
