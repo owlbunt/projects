@@ -155,26 +155,11 @@ input[type="checkbox"]:checked {
 .menuBtn{
   display: none;
 }
-/* Profile Widget Icon */
-.profileWidgetIcon{
-  height: 40px;
-  width: 40px;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-.profileWidget.dropdown-menu{
-  transform: translate3d(-10px, 10px, 0px)!important;
-  transition: all .3s ease;
-  /* display: block;
-  position: absolute;
-  right: 0;
-  top: 0; */
-  opacity: 1;
-  box-shadow: -500px 50px 0px 1080px rgba(255, 255, 255, .5);
-}
 
+/* Profile Widget */
+.profileWidgetIcon.active{
+  opacity: .5;
+}
 
 /* Responsive */
 @media screen and (max-width: 480px){
