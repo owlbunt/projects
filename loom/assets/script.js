@@ -158,7 +158,7 @@ function displayMessages(data) {
         messageDiv.innerHTML = `
             <div class="messageTemplate">
                 <div class="userInfo d-flex align-items-center">
-                    <img src="${profilePicture}" alt="Profile Picture" height="30px" class="border rounded-circle p-1 me-2">
+                    <img src="${profilePicture}" alt="Profile Picture" height="30px" class="border border-2 rounded-circle me-2">
                     <span class="name fw-bold me-1">${name}</span>
                     <span class="time text-muted">• ${formattedTime}</span>
                 </div>
@@ -311,12 +311,6 @@ function clearMessages() {
             console.error("Error clearing messages:", error);
         });
 }
-
-// Profile Widget
-let profileWidgetIcon = document.querySelector(".profileWidgetIcon");
-profileWidgetIcon.addEventListener("click", ()=>{
-    profileWidgetIcon.classList.toggle("active");
-})
 
 // Logout Function
 function logout() {
