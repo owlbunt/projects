@@ -57,16 +57,6 @@ input[type="checkbox"]:checked {
   z-index: 2;
 }
 
-
-/* /////////  Chat Page ////////////*/
-/* Chat Container */
-.globalChat{
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-  height: 100%;
-  width: 100%;
-}
-
 /* Global Chat */
 .chatContainer{
   position: relative;

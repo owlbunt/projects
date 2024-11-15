@@ -1,5 +1,5 @@
 // Firebase configuration
-const firebaseConfig = {
+let firebaseConfig = {
     apiKey: "AIzaSyBvuUQ94hFIcLJ3PnErAOKiWbxdu07lhwg",
     authDomain: "loomchatapp.firebaseapp.com",
     databaseURL: "https://loomchatapp-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -125,7 +125,7 @@ function loadUserDetails(userDetails) {
 // Load Chat Page
 async function loggedIn() {
     try {
-        const response = await fetch("./chat.html");
+        const response = await fetch("./dashboard.html");
         document.body.innerHTML = await response.text();
 
         document.querySelector("#message").addEventListener("keypress", (event) => {
