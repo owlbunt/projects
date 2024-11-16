@@ -172,6 +172,9 @@ input[type="checkbox"]:checked {
   .mobileMenu{
     display: block;
   }
+  .mobileMenu .sidebar{
+    display:block!important;
+  }
   .menuBtn{
     display: block;
   }
