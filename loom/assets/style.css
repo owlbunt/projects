@@ -165,7 +165,7 @@ input[type="checkbox"]:checked {
 /* Responsive */
 @media screen and (max-width: 480px){
   /* Hide Sidebar */
-  .globalChat .sidebar{
+  .sidebar{
     display: none!important;
   }
   /* Mobile Menu */
